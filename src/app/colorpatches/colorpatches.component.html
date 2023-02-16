@@ -1,0 +1,33 @@
+<p>{{greeting$ | async}}, colorpatches works!</p>
+
+
+<div *ngIf="patchArray" class="patchcontainer">
+    <app-colorpatch *ngFor="let thisPatch of patchArray" [patch]="thisPatch"
+    [edit]="!edit"
+        (update)="updateColor($event)"></app-colorpatch>
+</div>
+<div *ngIf="edit">
+    <h1>Edit!
+    </h1>
+    <div class="editbox">
+        <div (input)="onSliderInput()" class="sliderbox">
+            <input type="range" min="0" max="255" step="1" [(ngModel)]="editPatch.r">
+            <br>
+            <input type="range" min="0" max="255" step="1" [(ngModel)]="editPatch.g">
+            <br>
+            <input type="range" min="0" max="255" step="1" [(ngModel)]="editPatch.b">
+            <br>
+            <input type="range" min="0" max="1" step="0.01" [(ngModel)]="editPatch.a">
+            <br>
+            <button (click)="onCancelUpdate()">Cancel</button>
+            <button (click)="onSavePatch()">Save patch</button>
+        </div>
+        <div class="colorpatch">
+            <div [style.background-color]="rgba$ | async">
+                {{ rgba$ | async}}
+            </div>
+            
+        </div>
+    </div>
+    
+</div>
