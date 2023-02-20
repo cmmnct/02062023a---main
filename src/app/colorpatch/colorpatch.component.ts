@@ -21,13 +21,9 @@ export class ColorpatchComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-  }
-  ngDoCheck() {
-
-    console.log("do!");
-     this.rgba = this.patch.getRgba(); //werkt niet met OnPush change detection!
      this.newRgba$.next(this.patch.getRgba())
   }
+  
   editPatch(){
     this.update.emit(this.patch);
   }

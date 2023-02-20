@@ -1,8 +1,8 @@
 <p>{{greeting$ | async}}, colorpatches works!</p>
 
 
-<div *ngIf="patchArray" class="patchcontainer">
-    <app-colorpatch *ngFor="let thisPatch of patchArray" [patch]="thisPatch"
+<div *ngIf="patchArray$" class="patchcontainer">
+    <app-colorpatch *ngFor="let thisPatch of patchArray$ | async" [patch]="thisPatch"
     [edit]="!edit"
         (update)="updateColor($event)"></app-colorpatch>
 </div>
@@ -11,13 +11,13 @@
     </h1>
     <div class="editbox">
         <div (input)="onSliderInput()" class="sliderbox">
-            <input type="range" min="0" max="255" step="1" [(ngModel)]="editPatch.r">
+            <input type="range" min="0" max="255" step="1" [(ngModel)]="currentPatch.r">
             <br>
-            <input type="range" min="0" max="255" step="1" [(ngModel)]="editPatch.g">
+            <input type="range" min="0" max="255" step="1" [(ngModel)]="currentPatch.g">
             <br>
-            <input type="range" min="0" max="255" step="1" [(ngModel)]="editPatch.b">
+            <input type="range" min="0" max="255" step="1" [(ngModel)]="currentPatch.b">
             <br>
-            <input type="range" min="0" max="1" step="0.01" [(ngModel)]="editPatch.a">
+            <input type="range" min="0" max="1" step="0.01" [(ngModel)]="currentPatch.a">
             <br>
             <button (click)="onCancelUpdate()">Cancel</button>
             <button (click)="onSavePatch()">Save patch</button>

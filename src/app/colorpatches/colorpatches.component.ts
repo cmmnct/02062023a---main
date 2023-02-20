@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { BehaviorSubject, of, Subject } from 'rxjs';
+import { BehaviorSubject, of, Subject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators'
 import { Colorpatch } from '../models/colorpatch';
+import { PatchesService } from './data/patches.service';
 
 @Component({
   selector: 'app-colorpatches',
@@ -11,61 +13,50 @@ import { Colorpatch } from '../models/colorpatch';
 export class ColorpatchesComponent implements OnInit {
 
   currentPatch: Colorpatch = new Colorpatch(0, 0, 0, 1, "black") ;
-  editPatch: Colorpatch = new Colorpatch(0, 0, 0, 1, "black");
+  editPatchIndex: number;
   edit: Boolean = false;
 
   readonly greeting$ = new BehaviorSubject<string>('hello');
   readonly rgba$ = new Subject<string>();
-  readonly patchArray: Colorpatch[] = [
-    new Colorpatch(0, 0, 0, 1, "black"),
-    new Colorpatch(255, 255, 255, 1, "white"),
-    new Colorpatch(255, 0, 0, 1, "red"),
-    new Colorpatch(0, 255, 0, 1, "green"),
-    new Colorpatch(0, 0, 255, 1, "blue"),
-    new Colorpatch(0, 255, 255, 1, "cyan"),
-    new Colorpatch(255, 0, 255, 1, "magenta"),
-    new Colorpatch(255, 255, 0, 1, "yellow")
-  ]
-  readonly patchArray$ = new BehaviorSubject(this.patchArray);
+  
+ patchArray$:Observable<Colorpatch[]>;
 
-  constructor() {
+  constructor(private patchesService : PatchesService) {
   }
   ngOnInit(): void {   //life cycle hook
     this.greeting$.next('Good morning');
+    this.patchArray$ = this.patchesService.getColorPatches();
   }
 
   ngDoCheck() {
-    console.log("do");
-    this.rgba$.next(this.editPatch.getRgba());
+    this.rgba$.next(this.currentPatch.getRgba());
   }
   updateColor(patch: Colorpatch) {
     this.currentPatch.r = patch.r
     this.currentPatch.g = patch.g
     this.currentPatch.b = patch.b
     this.currentPatch.a = patch.a
-    this.editPatch = patch;
+    this.patchArray$.subscribe(
+      patchArray => this.editPatchIndex = patchArray.indexOf(patch)
+      )
+    ;
+    
+    //this.patchesService.updatePatch()
     this.greeting$.next('Good afternoon');
-    this.rgba$.next(this.editPatch.getRgba());
+    this.rgba$.next(this.currentPatch.getRgba());
     this.edit = true;
   }
   onSliderInput() {
-    
-    console.log("slide")
-    this.patchArray$.next(this.patchArray);
-    this.rgba$.next(this.editPatch.getRgba());
+   
+    this.rgba$.next(this.currentPatch.getRgba());
 
   }
   onSavePatch() {
-    this.editPatch = this.currentPatch;
-    this.currentPatch = new Colorpatch(0, 0, 0, 1, "black");
+   this.patchesService.updatePatch(this.editPatchIndex, this.currentPatch);
+    this.currentPatch = new Colorpatch(0, 0, 0, 1, "black") 
     this.edit = false;
   }
   onCancelUpdate() {
-    this.editPatch.r = this.currentPatch.r;
-    this.editPatch.g = this.currentPatch.g;
-    this.editPatch.b = this.currentPatch.b;
-    this.editPatch.a = this.currentPatch.a;
-    
     this.edit = false;
   }
 

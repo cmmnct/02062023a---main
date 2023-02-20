@@ -1,7 +1,7 @@
 <div class="colorpatch" 
 [title]="patch.name" 
 [style.background-color]="newRgba$ | async">
-<fa-icon *ngIf="edit" [icon]="faEdit" (click)="editPatch()"></fa-icon>
+<fa-icon *ngIf="edit" [icon]="faEdit" (click)="editPatch()" class="patchIcon"></fa-icon>
 {{ patch.r}}<br>
 {{ patch.g}}<br>
 {{ patch.b}}<br>
