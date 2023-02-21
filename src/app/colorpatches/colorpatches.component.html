@@ -2,35 +2,38 @@
     {{greet}}
 </div>
 
-<div *ngIf="patchArray$" class="patchcontainer">
-    <app-colorpatch *ngFor="let thisPatch of patchArray$ | async" [patch]="thisPatch" [edit]="!edit"
-        (update)="updateColor($event)"></app-colorpatch>
-</div>
-<div *ngIf="edit">
-    <h1>Edit!
-    </h1>
-    <div class="editbox">
-        <div (input)="onSliderInput()" class="sliderbox">
-            <input type="range" min="0" max="255" step="1" [(ngModel)]="currentPatch.r">
-            <br>
-            <input type="range" min="0" max="255" step="1" [(ngModel)]="currentPatch.g">
-            <br>
-            <input type="range" min="0" max="255" step="1" [(ngModel)]="currentPatch.b">
-            <br>
-            <input type="range" min="0" max="1" step="0.01" [(ngModel)]="currentPatch.a">
-            <br>
-            <button (click)="onCancelUpdate()">Cancel</button>
-            <button (click)="onSavePatch()">Save patch</button>
-        </div>
-        <div class="colorpatch">
-            <div *ngIf="rgba$ | async as rgba">
-                <div [style.background-color]="rgba">
-                    {{ rgba}}
-                </div>
+<div *ngIf="state$ | async as state">
+    <div *ngIf="patchArray$ " class="patchcontainer">
+        <app-colorpatch *ngFor="let thisPatch of patchArray$ | async" [patch]="thisPatch" [edit]="!state.edit"
+            (update)="updateColor($event)"></app-colorpatch>
+    </div>
+    <div *ngIf="state.edit">
+        <h1>Edit!
+        </h1>
+        <div class="editbox">
+            <div (input)="onSliderInput()" class="sliderbox">
+                <input type="range" min="0" max="255" step="1" [(ngModel)]="currentPatch.r">
+                <br>
+                <input type="range" min="0" max="255" step="1" [(ngModel)]="currentPatch.g">
+                <br>
+                <input type="range" min="0" max="255" step="1" [(ngModel)]="currentPatch.b">
+                <br>
+                <input type="range" min="0" max="1" step="0.01" [(ngModel)]="currentPatch.a">
+                <br>
+                <input type="text" [(ngModel)]="currentPatch.name">
+                <br>
+                <button (click)="onCancelUpdate()">Cancel</button>
+                <button (click)="onSavePatch()">Save patch</button>
             </div>
+            <div class="colorpatch">
+                <div *ngIf="rgba$ | async as rgba">
+                    <div [style.background-color]="rgba">
+                        {{ rgba}}
+                    </div>
+                </div>
 
 
+            </div>
         </div>
     </div>
-
 </div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 export interface State {
   edit: boolean
@@ -9,19 +9,17 @@ export interface State {
   providedIn: 'root'
 })
 
- 
-
 export class StateService {
 
   state: State = {
-    "edit": true
+    "edit": false
   }
 
-  state$ = new BehaviorSubject(this.state)
+  state$ = new BehaviorSubject<State>(this.state)
 
   constructor() { }
 
-  getState():Observable<State>{
+  getState():BehaviorSubject<State>{
     return this.state$;
   }
 

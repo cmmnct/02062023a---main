@@ -12,7 +12,7 @@ import { PatchesService } from './data/patches.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ColorpatchesComponent implements OnInit {
-  stateService = Inject(StateService)
+  //stateService = Inject(StateService);
   currentPatch: Colorpatch = new Colorpatch(0, 0, 0, 1, "black") ;
   editPatchIndex: number;
   edit: Boolean = false;
@@ -21,13 +21,12 @@ export class ColorpatchesComponent implements OnInit {
   readonly rgba$ = new Subject<string>();
   
  patchArray$:Observable<Colorpatch[]>;
- state$:Observable<State>;
+ state$:BehaviorSubject<State>;
 
-  constructor(private patchesService : PatchesService) {
+  constructor(private patchesService : PatchesService, private stateService: StateService) {
   }
   ngOnInit(): void {   //life cycle hook
     this.greeting$.next('Good morning');
-
     this.patchArray$ = this.patchesService.getColorPatches();
     this.state$ = this.stateService.getState();
   }
@@ -39,7 +38,8 @@ export class ColorpatchesComponent implements OnInit {
     this.currentPatch = new Colorpatch(patch.r, patch.g, patch.b, patch.a, patch.name)
     this.editPatchIndex = this.patchesService.getPatchIndex(patch);
     this.rgba$.next(this.currentPatch.getRgba());
-    this.edit = true;
+    //this.edit = true;
+    this.stateService.setState(true);
   }
   onSliderInput() {
    
@@ -49,10 +49,11 @@ export class ColorpatchesComponent implements OnInit {
   onSavePatch() {
    this.patchesService.updatePatch(this.editPatchIndex, this.currentPatch);
     this.currentPatch = new Colorpatch(0, 0, 0, 1, "black") 
-    this.edit = false;
+    this.stateService.setState(false);
   }
   onCancelUpdate() {
-    this.edit = false;
+    this.stateService.setState(false);
+
   }
 
 
