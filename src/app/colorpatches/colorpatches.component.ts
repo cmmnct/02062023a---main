@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject } from '@angular/core';
 import { BehaviorSubject, of, Subject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators'
 import { Colorpatch } from '../models/colorpatch';
+import { State, StateService } from '../state.service';
 import { PatchesService } from './data/patches.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { PatchesService } from './data/patches.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ColorpatchesComponent implements OnInit {
-
+  stateService = Inject(StateService)
   currentPatch: Colorpatch = new Colorpatch(0, 0, 0, 1, "black") ;
   editPatchIndex: number;
   edit: Boolean = false;
@@ -20,12 +21,15 @@ export class ColorpatchesComponent implements OnInit {
   readonly rgba$ = new Subject<string>();
   
  patchArray$:Observable<Colorpatch[]>;
+ state$:Observable<State>;
 
   constructor(private patchesService : PatchesService) {
   }
   ngOnInit(): void {   //life cycle hook
     this.greeting$.next('Good morning');
+
     this.patchArray$ = this.patchesService.getColorPatches();
+    this.state$ = this.stateService.getState();
   }
 
   ngDoCheck() {
@@ -33,12 +37,7 @@ export class ColorpatchesComponent implements OnInit {
   }
   updateColor(patch: Colorpatch) {
     this.currentPatch = new Colorpatch(patch.r, patch.g, patch.b, patch.a, patch.name)
-    this.editPatchIndex = this.patchesService.getPatchIndex(patch)
-
-    ;
-    
-    //this.patchesService.updatePatch()
-    this.greeting$.next('Good afternoon');
+    this.editPatchIndex = this.patchesService.getPatchIndex(patch);
     this.rgba$.next(this.currentPatch.getRgba());
     this.edit = true;
   }
