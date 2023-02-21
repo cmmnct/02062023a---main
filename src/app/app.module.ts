@@ -9,6 +9,7 @@ import { ColortostringPipe } from './colortostring.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms';
 import { BigfootComponent } from './bigfoot/bigfoot.component';
+import { HttpClientModule} from '@angular/common/http';
 
 
 
@@ -24,7 +25,8 @@ import { BigfootComponent } from './bigfoot/bigfoot.component';
   imports: [
     BrowserModule,
     FormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,1 +1,5 @@
 <p>bigfoot works!</p>
+<div *ngIf="patchArray$" class="patchcontainer">
+    <app-colorpatch *ngFor="let thisPatch of patchArray$ | async" [patch]="thisPatch"
+        ></app-colorpatch>
+</div>

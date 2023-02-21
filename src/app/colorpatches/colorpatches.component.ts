@@ -32,13 +32,9 @@ export class ColorpatchesComponent implements OnInit {
     this.rgba$.next(this.currentPatch.getRgba());
   }
   updateColor(patch: Colorpatch) {
-    this.currentPatch.r = patch.r
-    this.currentPatch.g = patch.g
-    this.currentPatch.b = patch.b
-    this.currentPatch.a = patch.a
-    this.patchArray$.subscribe(
-      patchArray => this.editPatchIndex = patchArray.indexOf(patch)
-      )
+    this.currentPatch = new Colorpatch(patch.r, patch.g, patch.b, patch.a, patch.name)
+    this.editPatchIndex = this.patchesService.getPatchIndex(patch)
+
     ;
     
     //this.patchesService.updatePatch()

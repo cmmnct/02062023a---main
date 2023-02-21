@@ -1,9 +1,9 @@
-<p>{{greeting$ | async}}, colorpatches works!</p>
-
+<div *ngIf="greeting$ | async as greet">
+    {{greet}}
+</div>
 
 <div *ngIf="patchArray$" class="patchcontainer">
-    <app-colorpatch *ngFor="let thisPatch of patchArray$ | async" [patch]="thisPatch"
-    [edit]="!edit"
+    <app-colorpatch *ngFor="let thisPatch of patchArray$ | async" [patch]="thisPatch" [edit]="!edit"
         (update)="updateColor($event)"></app-colorpatch>
 </div>
 <div *ngIf="edit">
@@ -23,11 +23,14 @@
             <button (click)="onSavePatch()">Save patch</button>
         </div>
         <div class="colorpatch">
-            <div [style.background-color]="rgba$ | async">
-                {{ rgba$ | async}}
+            <div *ngIf="rgba$ | async as rgba">
+                <div [style.background-color]="rgba">
+                    {{ rgba}}
+                </div>
             </div>
-            
+
+
         </div>
     </div>
-    
+
 </div>
